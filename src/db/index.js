@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const {Sequelize,DataTypes} = require("sequelize");
 const sequelize = new Sequelize(process.env.PG_URL);
 
 sequelize
@@ -10,6 +10,11 @@ sequelize
     console.log("unable to connect to the database:", err);
   });
 
+const db={};
+db.Sequelize=Sequelize;
+db.sequelize=sequelize;
+db.books=require("../models/book")(sequelize, DataTypes);
+
 sequelize
   .sync({ force: false })
   .then(() => {
@@ -19,4 +24,4 @@ sequelize
     console.log("error creating database:", err);
   });
 
-module.exports = sequelize;
+module.exports = db;
